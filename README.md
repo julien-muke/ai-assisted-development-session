@@ -76,3 +76,60 @@ export const handler = async (event) => {
     body: JSON.stringify({ response })
   };
 };
+```
+
+## 4. Code Validation and Improvements
+
+After reviewing the AI-generated code, the following improvements were implemented:
+
+- Input sanitization
+- Request size limits
+- Structured logging
+- Robust error handling
+
+Example improvement:
+
+```typescript
+if (!body.message || body.message.length > 1000) {
+  return {
+    statusCode: 400,
+    body: JSON.stringify({ error: "Invalid input length" })
+  };
+}
+```
+
+Structured logging:
+
+```typescript
+console.log("Incoming request", {
+  messageLength: body.message.length
+});
+```
+
+## 5. Security Considerations
+
+Security improvements included:
+
+- Input validation
+- Sanitization of incoming data
+- Removal of sensitive data from logs
+- IAM role restricted to Bedrock invocation
+- HTTPS-only API Gateway endpoint
+
+
+## 6. Testing Strategy
+
+AI-assisted test generation was used to generate initial unit tests.
+
+Example Jest test:
+
+```typescript
+test("returns error when message missing", async () => {
+  const event = { body: JSON.stringify({}) };
+
+  const response = await handler(event);
+
+  expect(response.statusCode).toBe(400);
+});
+```
+These tests were manually reviewed and expanded.
